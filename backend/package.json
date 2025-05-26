@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc && nodemon dist/index.js"
+    "dev": "tsc && nodemon dist/index.js",
+    "start": "tsc && pm2 start dist/index.js"
   },
   "keywords": [],
   "author": "",
