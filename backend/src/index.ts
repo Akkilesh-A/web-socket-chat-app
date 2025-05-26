@@ -13,26 +13,33 @@ wss.on("connection",(socket)=>{
     console.log("New User connected");
 
     socket.on("message",(message)=>{   
-        const JSONMessage = JSON.parse(message.toString())
-        if(JSONMessage.type==="join"){
-            console.log("User joined room",JSONMessage.payload.roomId);
-            allSockets.push({
-                socket:socket as unknown as WebSocket,
-                room:JSONMessage.payload.roomId!
-            })
-        }
-        else if(JSONMessage.type==="chat"){
-            const currentUserRoom = allSockets.find((x)=>x.socket===socket as unknown as WebSocket)?.room
-            if(currentUserRoom){
-                allSockets.forEach((user)=>{
-                    if(user.room===currentUserRoom){
-                        user.socket.send(JSONMessage.payload.message!)
-                    }
+        try{
+            const JSONMessage = JSON.parse(message.toString())
+            if(JSONMessage.type==="join"){
+                console.log("User joined room",JSONMessage.payload.roomId);
+                allSockets.push({
+                    socket:socket as unknown as WebSocket,
+                    room:JSONMessage.payload.roomId!
                 })
             }
-        }
-        else{
-            console.log("Unknown message type")
+            else if(JSONMessage.type==="chat"){
+                const currentUserRoom = allSockets.find((x)=>x.socket===socket as unknown as WebSocket)?.room
+                if(currentUserRoom){
+                    allSockets.forEach((user)=>{
+                        if(user.room===currentUserRoom){
+                            user.socket.send(JSONMessage.payload.message!)
+                        }
+                    })
+                }
+            }
+            else{
+                console.log("Unknown message type")
+            }
+        }catch(e){
+            console.error("Error parsing message", e);
+            allSockets.forEach((user)=>{
+                user.socket.send("Invalid message")
+            })
         }
     });
 

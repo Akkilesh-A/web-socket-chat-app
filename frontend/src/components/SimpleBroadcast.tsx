@@ -12,6 +12,10 @@ const SimpleBroadcast = () => {
       description: "Connecting to websocket server...",
     });
     try {
+      console.log(
+        "Connecting to websocket server... at ",
+        import.meta.env.VITE_SOCKET_URL
+      );
       const ws = new WebSocket(import.meta.env.VITE_SOCKET_URL);
 
       ws.onmessage = (event) => {
@@ -44,7 +48,11 @@ const SimpleBroadcast = () => {
   }, []);
 
   return (
-    <Card title="Simple Broadcast" about="Everyone can see your messages!" className="w-[400px] h-[500px] p-4">
+    <Card
+      title="Simple Broadcast"
+      about="Everyone can see your messages!"
+      className="w-[400px] h-[500px] p-4"
+    >
       <div className="p-4 flex-1 h-[350px] overflow-y-auto space-y-2">
         {messages.map((message, index) => (
           <p key={index} className="p-2 rounded w-auto bg-gray-200">
