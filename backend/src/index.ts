@@ -15,6 +15,7 @@ wss.on("connection",(socket)=>{
     socket.on("message",(message)=>{   
         const JSONMessage = JSON.parse(message.toString())
         if(JSONMessage.type==="join"){
+            console.log("User joined room",JSONMessage.payload.roomId);
             allSockets.push({
                 socket:socket as unknown as WebSocket,
                 room:JSONMessage.payload.roomId!
@@ -34,6 +35,7 @@ wss.on("connection",(socket)=>{
             console.log("Unknown message type")
         }
     });
+
 })
 
 // -------------- SCHEMA FOR MESSAGING -------------- //
@@ -53,4 +55,5 @@ wss.on("connection",(socket)=>{
 //     "type":"chat",
 //     "payload":{
 //         "message":"hi there"
+//      }
 // }
